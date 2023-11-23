@@ -1,2 +1,5 @@
-# analisis-de-la-cienciometria-en-biociencias
-tesis analisis de la cienciometria en biociencias
+# Análisis de la cienciometría en biociencias🧬🦠 
+
+En las biociencias, es cada vez es más común encontrar revisiones de literatura que pueden ser de distintos tipos, como los estados del arte y las revisiones narrativas, que pueden incluir en algunos casos la extracción de datos y análisis cuantitativos como en las revisiones sistemáticas y los metá-análisis, o centrarse en la obtención de tendencias, patrones, evolución, estructura, relaciones e indicadores como se hace en los análisis cienciométricos (también llamados bibliométricos). En este proyecto nos centraremos en cómo se ha utilizado la cienciometría para generar nuevo conocimiento. El objetivo es utilizar la bibliografía en Biociencias para entender cómo se ha usado la cienciometría, y otros métodos métricos relacionados, como la bibliometría, la infometría y la almetría, para responder preguntas basadas en la literatura, la intención es descubrir las aplicaciones cienciométricas en biociencias más interesantes, creativas y singulares, para implementarlas.
+
+Minerva
