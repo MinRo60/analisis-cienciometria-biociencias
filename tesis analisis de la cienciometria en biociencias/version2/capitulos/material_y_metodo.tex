@@ -1,0 +1,129 @@
+\documentclass[../Main.tex]{subfiles}
+
+\begin{document}
+\noindent
+%%%%------------Material y Metodo------------%%%%%%
+Esta investigación \textit{in silico} centrada en el uso de recursos informáticos, basada en la literatura y sustentada en teorías matemáticas, constó de ocho etapas. \\
+%%%%%----diagrama 
+Durante estas etapas utilicé la base de dato bibliográfica PubMed, el lenguaje de programación R con las paqueterías, bibliometrix y ggplot2. Para programar utilicé Rstudio en una computadora Asus VivoBook con sistema operativo de 64 bits, procesador AMD Ryzen 7 4700U y RAM de 16.0 GB.
+\section{Planeación}
+
+\noindent
+Para recuperar la literatura de una forma eficiente, use las APIs (Application Programming Interface) de las fuentes, para poder usaras, exploré su funcionamiento en distintos recursos como textos, plataformas, videos, etc.
+
+\smallskip
+Además, entender el mundo de los análisis de literatura y las bases de datos bibliográficas, revise artículos, publicaciones, entrevistas y vídeos de expertos. El análisis cienciométrico es un proceso largo, generalmente realizada por equipos multidisciplinarios, que involucra una gran cantidad de datos, y que ha tenido un impulso a partir de la era de la digitalización, ya que resulta más sencillo tener acceso a las bases de datos de las cuales se extrae la información.
+
+\section{Recuperación de la literatura en bases de datos}
+\noindent
+Para esta etapa con ayuda del esquema de la Figura 2 se organizan los elementos para hacer una recuperación de literatura,  (ri biocolores 2023)
+
+\smallskip
+Las biociencias son un campo de estudio muy amplio y por ende intentar buscar literatura de todo este sería una tarea titánica, es por esto que realice una primera busqueda, esta fue genraral para ver todas las publicaciones sobre cienciometría en PubMed en esta búsqueda utilice términos generales para mostrar y visualizar la gran cantidad de publicaciones que existen. La consulta utilizada fue evolucionando hasta obtener una consulta interesante.\\
+\framebox{\textbf{Consulta 0:} scientometric* OR bibliometr* OR altmetr* OR cybermetr* OR infometr*}
+
+\smallskip
+Ya que se obtuvo un conjunto muy grnade de datos elegí el tema de COVID-19, ya que me  parece interesante para encontrar las nuevas tecnologías y métodos innovadores, en estos tres años hay una gran cantidad de análisis métricos que se realizaron desde distinto enfoques como lo son la enfermedad, la pandemia y el virus, a pesar de que también hay publicaciones que fueron publicadas en el periodo de la pandemia estas no las consideré, puesto que no hablan propiamente del COVID-19.
+
+\smallskip
+Para este tema obtuve distintas consultas interesantes.\\
+
+\noindent
+\fbox{
+\begin{minipage}[c][1.2\height]%
+[c]{1\textwidth} \textbf{Consulta 1:} (Scientometr* OR Bibliometr* OR Altmetr* OR Cybermetr* OR Infometr* OR entitymetr*)AND (covid-19 OR SARS-CoV-2)\\
+\textbf{Consulta 2:} (("Bibliometrics"[Mesh] OR entitymetr* OR scientometr* OR Altmetr* OR Cybermetr* OR Infometr* OR "metrics") AND ("COVID-19"[Mesh] OR "SARS-CoV-2"[Mesh])) NOT "Journal Impact Factor"[Mesh]
+\end{minipage}}
+
+\section{Definición de criterios de inclusión, de exclusión y las variables}
+\noindent
+Los artículos que incluí para la etapa dos tenían que cumplir con los siguientes criterios:
+\begin{itemize}
+    \item Tener el identificador DOI.
+    \item Tener el identificador PMID.
+    \item Ser sobre el virus, la enfermedad o la pandemia del COVID-19 o SARS-CoV-2.
+    \item Artículos publicados entre el 2020 y 2023.
+    \item No ser publicaciones que fueran publicadas en el periodo de la pandemia del COVID-19
+    \item Realiza un análisis cienciométrico explícitamente.
+    \item No ser de factor de impacto, es decir, que evalúen a instituciones o autores.
+    \item Variables
+\end{itemize}
+\subsection{Metadatos bibliográficos}
+Los metadatos asociados a las publicaciones tienen un ciclo por el que se le va asociando los metadatos, primero la revista le pide al autor ingresar datos como titulo, resumen, palabras clave y autores, segundo la revista al publicar genera metadatos como el DOI y otros identificadores, tercero las bases de datos cuando indexan los documentos generan metadatos como identificadores, cuarto los usuarios pueden generar nuevos metadatos obteniéndolos desde el documento para poder realizar análisis más robustos, en la tabla \ref{tab:variables} se muestra en la columna de origen de los metadatos la etapa en la cual se originó cada metadato extraído de los documentos. 
+%%%%% Cambiar la tabla%%%%%
+
+Los metadatos son información que se evalúa en un análisis de la literatura, es por esto que se usan como variables %%%%Mejorar este parrafo  
+Durante el procedimiento registré todas las variables factibles para ser analizadas (Tabla \ref{tab:variables}) y  después seleccioné las variables que usé para las siguientes etapas. Para este análisis yo utilicé los metadatos que genera la revista, la base de datos y los que generé que se encuentran el la tabla \ref{tab:variables} con $*$  
+%%%%% Cambiar la tabla%%%%%
+\begin{table}[H]
+\begin{tabular}{|c|c}
+\cline{1-1}
+\textbf{Variables}                                                                            & \textbf{} \\ \cline{1-1}
+\cellcolor[HTML]{EDBED7}Autores                                                               &           \\ \cline{1-1}
+Adscripción de los autores                                                                    &           \\ \cline{1-1}
+Título                                                                                        &           \\ \cline{1-1}
+Identificadores (DOI, PMID, PMCID)                                                            &           \\ \cline{1-1}
+\cellcolor[HTML]{EDBED7}Términos MeSH                                                         &           \\ \cline{1-1}
+Anotaciones SciLite                                                                           &           \\ \cline{1-1}
+Acceso                                                                                        &           \\ \cline{1-1}
+Resumen                                                                                       &           \\ \cline{1-1}
+Fecha de publicación                                                                          &           \\ \cline{1-1}
+Tipo de publicación                                                                           &           \\ \cline{1-1}
+\cellcolor[HTML]{EDBED7}Revista                                                               &           \\ \cline{1-1}
+\cellcolor[HTML]{EDBED7}Palabras clave                                                        &           \\ \cline{1-1}
+Idioma                                                                                        &           \\ \cline{1-1}
+Citas                                                                                         &           \\ \cline{1-1}
+Fuente/Base de datos                                                                          &           \\ \cline{1-1}
+Número de registros analizados                                                                &           \\ \cline{1-1}
+Objetivo del estudio                                                                          &           \\ \cline{1-1}
+Tipo de análisis métrico                                                                      &           \\ \cline{1-1}
+Fecha de inicio del estudio                                                                   &           \\ \cline{1-1}
+Fecha de fin del estudio                                                                      &           \\ \cline{1-1}
+Intervalo de tiempo del estudio                                                               &           \\ \cline{1-1}
+Consulta                                                                                      &           \\ \cline{1-1}
+Software                                                                                      &           \\ \cline{1-1}
+API’s utilizadas                                                                              &           \\ \cline{1-1}
+Tipo de estadísticas                                                                          &           \\ \cline{1-1}
+Tipo de tecnologías usadas como IA, análisis de textos, bibliometría, análisis de redes, etc. &           \\ \cline{1-1}
+Otras bases de datos asociadas utilizadas durante el estudio                                  &           \\ \cline{1-1}
+Herramientas digitales utilizadas                                                             &           \\ \cline{1-1}
+\end{tabular}
+    \caption{\textit{Tabla con las variables que se pueden evaluar de estas, solo seleccione las que se encuentran en color rosa.}}
+    \label{tab:variables}
+\end{table}
+Las variables que serán usadas se eligieron para poder ver las leyes de la bibliometría y para hacer análisis de redes.
+\begin{itemize}
+    \item Los autores son las personas que contribuyeron para la realización de la publicación, cada investigador tiene un área de especialidad.
+    \item Las revistas son  publicaciones periódicas que tienen un enfoque y alcance específico, en las que se publican los textos revisados por pares que cumplen con los requisitos de la revista. 
+    \item Las palabras clave de un texto son uno o más términos en los cuales se describe la investigación. Estas son metadatos básicos de cualquier texto y son generados por los autores al publicar en una revista.  
+    \item Los términos MeSH son términos estandarizados del tesauro MeSH, estos se utilizan para indexar, catalogar y buscar información biomédica y relacionada con la salud. Estos términos en PubMed se pueden ver y descargar como metadatos asociados a los textos \parencite{noauthor_medical_2023}.
+\end{itemize}
+
+\section{Extracción de los datos}
+\noindent
+El ciclo de los metadatos\\
+Para obtener los datos necesarios para el análisis de manera eficiente y rápida se extrajeron los metadatos mediante la API de PubMed, 
+\section{Procesamiento de la información de la literatura}
+\noindent
+la
+\section{Análisis}
+\noindent
+Dos grandes formas en las cuales se pueden procesar metadatos biométricamente son desde aplicaciones en línea amigables, las cuales muchas veces están asociadas a bases de datos y desde software en los que se necesita conocimiento en programación y resultan no ser amigables.\\
+Ejemplos\\
+Para realizar el análisis utilicé Bibliometrix una paquetería de R \parencite{bibliometrix}
+
+\section{Visualización de datos}
+\noindent
+de
+\section{Integración y contextualización de la información}
+\noindent
+Durante la
+
+\smallskip
+Para el registro de los artículos y notas, utilice hypothes.is. Una herramienta digital de gran utilidad que nos parece muy valiosa para la investigación digital.
+
+\smallskip
+Para mantenerme actualizada de nuevas publicaciones de los distintos temas en biociencias, genere los RSS
+
+
+\end{document}

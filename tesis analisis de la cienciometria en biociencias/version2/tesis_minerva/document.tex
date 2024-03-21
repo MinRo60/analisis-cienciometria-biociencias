@@ -1,0 +1,148 @@
+\documentclass[letterpaper,12pt,oneside]{book}
+\usepackage[top=1in, left=0.9in, right=1.25in, bottom=1in]{geometry}
+\usepackage{bachelorstitlepageUNAM}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{biblatex}
+%\addbibresource{biblatex-examples.bib}
+\usepackage[backend=biber,style=apa]{biblatex}
+\bibliography{Bibliografia.bib}
+\usepackage[spanish,es-nodecimaldot,es-tabla]{babel}
+\usepackage{graphicx}
+\usepackage{tikz} 
+\usepackage{tocloft}
+\usepackage{amsmath}
+\usepackage{blindtext}
+\usepackage{longtable}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+   }
+   \usepackage{multirow}%permite la modificacion de las tablas
+   \usepackage{colortbl}
+   \usepackage{float}
+   \usepackage{amssymb, amsmath}
+   \decimalpoint
+   \usepackage{listings}
+   \usepackage{amsfonts}
+   \usepackage{bbm}
+   \usepackage{bm}
+   \usepackage{mathtools}
+   \usepackage{matlab-prettifier}
+   \usepackage{amsthm}
+   \usepackage{titlesec}
+   \usepackage{setspace}
+   %\renewcommand{\baselinestretch}{2}
+   %%% Definición de teoremas y lemas %%
+   % https://es.overleaf.com/learn/latex/Theorems_and_proofs
+   \newtheorem{theorem}{Teorema} 
+   \newtheorem{proposition}[theorem]{Proposición}
+   \newtheorem{lemma}[theorem]{Lema}
+   \newtheorem{corollary}[theorem]{Corolario}
+   
+
+\title{Tesis de licenciatura Minerva} 
+\author{Minerva Romero}
+
+\IfFileExists{\jobname.run.xml}
+{
+%\includeonly{
+%  introduccion,
+%  material_metodo,
+%  resultados,
+%  discusion,
+%  append
+%  }
+}
+{
+% Compile inicialmente el documento completo para generar
+% todos los ficheros .aux
+}
+
+\begin{document}
+\frontmatter
+
+%------------------------------
+
+\begin{titlepage}
+    \thispagestyle{empty}
+    \begin{minipage}[c][0.17\textheight][c]{0.25\textwidth}
+        \begin{center}
+            \includegraphics[width=3.5cm, height=3.5cm]{Escudo-UNAM.pdf}
+        \end{center}
+    \end{minipage}
+    \begin{minipage}[c][0.195\textheight][t]{0.75\textwidth}
+        \begin{center}
+            \vspace{0.3cm}
+            \textsc{\large Universidad Nacional Aut\'onoma de M\'exico}\\[0.5cm]
+            \vspace{0.3cm}
+            \hrule height2.5pt
+            \vspace{.2cm}
+            \hrule height1pt
+            \vspace{.8cm}
+            \textsc{Facultad de Ciencias}\\[0.5cm] %
+        \end{center}
+    \end{minipage}
+
+    \begin{minipage}[c][0.81\textheight][t]{0.25\textwidth}
+        \vspace*{5mm}
+        \begin{center}
+            \hskip2.0mm
+            \vrule width1pt height13cm 
+            \vspace{5mm}
+            \hskip2pt
+            \vrule width2.5pt height13cm
+            \hskip2mm
+            \vrule width1pt height13cm \\
+            \vspace{5mm}
+            \includegraphics[height=4.0cm]{Escudo-FCIENCIAS.pdf}
+        \end{center}
+    \end{minipage}
+    \begin{minipage}[c][0.81\textheight][t]{0.75\textwidth}
+        \begin{center}
+            \vspace{1cm}
+
+            {\large\scshape Análisis de la cienciometría en biociencias}\\[.2in]
+
+            \vspace{2cm}            
+
+            \textsc{\LARGE T\hspace{1.5cm}E\hspace{1.5cm}S\hspace{1.5cm}I\hspace{1.5cm}S}\\[0.5cm]
+            \textsc{\large que para obtener el t\'itulo de:}\\[0.5cm]
+            \textsc{\large Matemáticas Aplicadas}\\[0.5cm]
+            \textsc{\large presenta:}\\[0.5cm]
+            \textsc{\large {Minerva María Romero Pérez}}\\[2cm]          
+
+            \vspace{0.5cm}
+
+            {\large\scshape Tutora:\\[0.3cm] {Dra. Layla Michán Aguirre }}\\[.2in]
+
+            \vspace{0.5cm}
+
+            \large{Ciudad Universitaria,Ciudad de México}{ }{2024}
+        \end{center}
+    \end{minipage}
+\end{titlepage}
+
+%---------------------------------
+
+% =========================
+\mainmatter
+\tableofcontents
+\include{introduccion}
+\include{material_metodo}
+\include{resultados}
+\include{discusion}
+\appendix
+\include{append}
+
+% ========================
+\backmatter
+\printbibliography
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
