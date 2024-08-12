@@ -16,7 +16,7 @@ api_key <- "502dad7087344ed54bd61f5e9caa08f2cd09"
 
 #CONSULTA
 #### revisar la consulta ver como se hacen 
-query <- "bibliometr*[Title]OR scientometr*[Title]"
+query <- "bibliometr*[Title]OR scientometr*[Title] AND 1900:2023[PDAT]"
 #####Bibliometrics[Mesh] OR ENTITYMETR*[Title] OR SCIENTOMETR*[Title] OR ALTMETR*[Title] OR INFOMETR*[Title]
 
 #Ahora queremos saber cuántos documentos podría recuperar nuestra consulta.

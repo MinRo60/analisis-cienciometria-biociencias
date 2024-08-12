@@ -14,8 +14,8 @@ api_key = NULL
 
 #CONSULTA
 #### revisar la consulta ver como se hacen 
-query <- "(Bibliometrics[mesh] OR entitymetr*[Title] OR scientometr*[Title] OR altmetr*[Title] OR infometr*[Title])  AND (COVID-19[mesh] OR SARS-COV-2[mesh])"
-#####"Bibliometrics"[Mesh] OR ENTITYMETR*[Title] OR SCIENTOMETR*[Title] OR ALTMETR*[Title] OR INFOMETR*[Title]AND (COVID-19[MESH] OR SARS-COV-2[MESH])
+query <- "(bibliometr*[Title] OR scientometr*[Title])  AND (COVID-19)AND 2019:2023[pdat]"
+#####"
 #Ahora queremos saber cuántos documentos podría recuperar nuestra consulta.
 #Para hacer eso, usamos la función pmQueryTotalCount:
 
@@ -41,6 +41,35 @@ summary(results)
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ##########################################################
 #ANÁLISIS DE LA LITERATURA
+
+#Ley de lotka
+L <- lotka(results)
+L
+
+lotkaTable=cbind(L$AuthorProd[,1],L$AuthorProd[,2],L$AuthorProd[,3],L$fitted)
+knitr::kable(lotkaTable, caption = "Frequency Of Authors Based on Lotka's Law", digits = 3, align = "cccc", format = "html",col.names = c("Number of article", "Number of authors", "Frequency based on data", "Frequency based on Lotka's law")) %>%
+  kable_classic(full_width = F, position = "center")
+lotkaTable
+# Productividad del autor. Distribución empírica
+L$AuthorProd
+# Estimación del coeficiente beta
+L$Beta
+# Constante
+L$C
+# Goodness of fit
+L$R2
+# Valor p de la prueba de dos muestras K-S
+L$p.value
+# Distribución observada
+Observed=L$AuthorProd[,3]
+
+# Distribución teórica con Beta = 2
+Theoretical=10^(log10(L$C)-2*log10(L$AuthorProd[,1]))
+
+plot(L$AuthorProd[,1],Theoretical,type="l",col="red",ylim=c(0, 1), xlab="Artículos",ylab="Freq. de autores",main="Productividad científica")
+lines(L$AuthorProd[,1],Observed,col="blue")
+legend(x="topright",c("teórica (B=2)","observada"),col=c("red","blue"),lty = c(1,1,1),cex=0.6,bty="n")
+
 
 #Coocurrencias de palabras clave
 NetMatrix <- biblioNetwork(M, analysis = "co-occurrences", network = "keywords", sep = ";")
