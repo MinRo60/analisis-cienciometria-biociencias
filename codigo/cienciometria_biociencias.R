@@ -9,18 +9,44 @@ library(kableExtra)
 library(ggplot2)
 library(ggwordcloud)
 library(readxl)
+library(tidyverse)
+library(extrafont)
 
-
+loadfonts(device = "win")
+par(family = "Times New Roman")
 paletamine13<-c("#ee0080", "#e51088", "#db2090", "#d23098", "#c840a0", "#bf50a8", "#b660b1", "#ac70b9", "#a380c1", "#9990c9", "#90a0d1", "#86b0d9", "#7dc0e1")
 paletamine5<-c("#ee0080", "#d23098", "#b660b1", "#9990c9", "#7dc0e1")
 paletamine4<-c("#ee0080", "#b660b1", "#9990c9", "#7dc0e1")
 
-M <- read_excel("MINERVA/git/tesis_minerva/codigo/biociencias.xlsx")
+M <- read_excel("R/biociencias.xlsx")
 results <- biblioAnalysis(M)
 S<-summary(results)
 
+years=c(2019,2020) 
+M <- as.data.frame(M)
+
+# Asegúrate de que el campo "DE" sea de tipo character
+M$DE <- as.character(M$DE)
+
+# Ejecuta thematicEvolution
+nexus <- thematicEvolution(M, field = "DE", years = years, n = 20, minFreq = 2)
+nexusMesh <- thematicEvolution(M, field = "ID", years = years, n = 20, minFreq = 2)
+
+
+# Plotea la evolución temática
+plotThematicEvolution(nexus$Nodes, nexus$Edges)
+png("tematic_evolution_network.png", width = 1608, height = 1185, units = "px", res = 300)
+plotThematicEvolution(nexus$Nodes, nexus$Edges)
+dev.off()
+plotThematicEvolution(nexusMesh$Nodes, nexusMesh$Edges)
+png("tematic_evolution_networkmesh.png", width = 1608, height = 1185, units = "px", res = 300)
+plotThematicEvolution(nexusMesh$Nodes, nexusMesh$Edges)
+dev.off()
+
+head(nexus$Nodes)
+head(nexus$Edges)
 ##############################################################################
-###################Ley de lotka###############################################
+###################Ley de lotka (Figura )###############################################
 L <- lotka(results)
 
 lotkaTable=cbind(L$AuthorProd[,1],L$AuthorProd[,2],L$AuthorProd[,3],L$fitted)
@@ -60,19 +86,48 @@ lotkaTable2=cbind(L$AuthorProd[,1],L$AuthorProd[,2],L$AuthorProd[,3],L$fitted,Th
 knitr::kable(lotkaTable2, caption = "Frecuencia de los autures basada en la ley de Lotka", digits = 4, align = "cccc", format = "html",col.names = c("Numero de artículos", "Numero de autores", "Freciencia basada en los datos", "Freciencia basada en la ley de Lotka con Beta calculada", "Frecuencia basdada en la ley Lotka con Beta = 2")) %>%
   kable_classic(full_width = F, position = "center")
 
-plot(L$AuthorProd[,1],Theoretical,type="l",col="#ee0080",ylim=c(0, 0.75), xlab="Artículos",ylab="Freq. de autores",main="Productividad científica")
+plot(L$AuthorProd[,1],Theoretical,type="l",col="#ee0080",ylim=c(0, 0.75), xlab="Artículos",ylab="Freq. de autores",main="Ley de Lotka")
 lines(L$AuthorProd[,1],Observed,col="#7dc0e1")
 lines(L$AuthorProd[,1],L$fitted,col="#b660b1")
 legend(x="topright",c("Teórica (Beta=2)","Observada", "Teórica (Beta=1.756255)"),col=c("#ee0080","#7dc0e1","#b660b1" ),lty = c(1,1,1),cex=0.6,bty="n")
+jpeg("lotka.jpeg", width = 1608, height = 1185, units = "px", res = 300)
 
 
 ##############################################################################
-######Ley de Zipf para palabras clave, términos mesh, titulos y resúmenes##### 
+######Ley de Bradford (Figura )##### 
+#Importar los datos
+leyBradford <- read_excel("R/Bradford.xlsx", 
+                       sheet = "RevistasBradford")
 
-pal <- read_excel("R/palabrasfrecuencia.xlsx", 
+# Filtrar solo las revistas que pertenecen a la Zona 1
+datosNucleo <- subset(leyBradford, Zone == "Zone 1")
+# Acortar las etiquetas de las revistas (columna So)
+datosNucleo$So <- ifelse(nchar(datosNucleo$So) > 20, 
+                             paste0(substr(datosNucleo$So, 1, 20), "..."), 
+                             datosNucleo$So)
+head(datosNucleo)
+# Crear gráfico de área con las revistas ordenadas de mayor a menor frecuencia
+ggplot(datosNucleo, aes(x = reorder(So, -Freq), y = Freq, group = 1)) +  # group = 1 es necesario para geom_area
+  geom_area(fill = "#ee0080", alpha = 0.6) +  # Usar geom_area para el área rellena
+  geom_line(color = "#b660b1", size = 1) +  # Añadir la línea para destacar la forma
+  labs(title = "Revistas en el Núcleo de la Ley de Bradford (Zona 1)",
+       x = "Revista", y = "Cantidad de artículos") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, family = "Times New Roman"),
+    axis.text.y = element_text(family = "Times New Roman"),
+    plot.title = element_text(family = "Times New Roman"),
+    axis.title.x = element_text(family = "Times New Roman"),
+    axis.title.y = element_text(family = "Times New Roman"))  # Rotar las etiquetas del eje X
+ggsave("ley de bradford.png", width = 1608, height = 1185, units = "px", dpi = 300)
+
+##############################################################################
+######Ley de Zipf para palabras clave, términos mesh, titulos y resúmenes (Figura )##### 
+
+leyZipf <- read_excel("R/palabrasfrecuencia.xlsx", 
                   sheet = "Hoja1")
 
-freq_by_rank <- pal %>% 
+freq_by_rank <- leyZipf %>% 
   group_by(Palabras) %>% 
   mutate(rank = row_number(), 
          term_frequency = Occurrences/total) %>%
@@ -90,7 +145,17 @@ freq_by_rank %>%
   xlab("rank")+ # eje x
   ylab("Frecuencia de la n-esima palabra")+ # eje y
   ggtitle("Ley de Zipf")+
-  scale_color_manual(values = paletamine4)
+  scale_color_manual(values = paletamine4)+
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, family = "Times New Roman"),
+    axis.text.y = element_text(family = "Times New Roman"),
+    plot.title = element_text(family = "Times New Roman"),
+    axis.title.x = element_text(family = "Times New Roman"),
+    axis.title.y = element_text(family = "Times New Roman"),
+    legend.text = element_text(family = "Times New Roman"),  
+    legend.title = element_text(family = "Times New Roman") )  
+ggsave("ley de zipf.png", width = 1608, height = 1185, units = "px", dpi = 300)
 
 rank_subset <- freq_by_rank %>% 
   filter(rank < 500,
@@ -107,7 +172,7 @@ lm(log10(term_frequency) ~ log10(rank), data = rank_subset)
  
 
 ##############################################################################
-##################### Palabras clave enfermedades ############################
+##################### Palabras clave enfermedades (Figura )############################
 df <- read_excel("R/palabrasfrecuencia.xlsx", 
                  sheet = "enfermedades DE")
 
@@ -117,23 +182,31 @@ ggplot(df, aes(label = DE, size = Recuento, color = Recuento)) +
   geom_text_wordcloud(shape = "square") +
   scale_size_area(max_size = 19) +
   theme_minimal()+
-  scale_color_gradientn(colours = paletamine13)
+  scale_color_gradientn(colours = paletamine13)+
+  theme(
+    text = element_text(family = "Times New Roman") )
+ggsave("nubePalabrasClave.png", width = 1608, height = 1185, units = "px", dpi = 300)
 
-################ Terminos MeSH enfermedades ##################
+
+################ Terminos MeSH enfermedades (Figura )##################
 #
-df <- read_excel("R/palabrasfrecuencia.xlsx", 
+dfM <- read_excel("R/palabrasfrecuencia.xlsx", 
                  sheet = "enfermedades ID")
 
 ##Categoría Bibliometría
 set.seed(1)
-ggplot(df, aes(label = ID, size = Recuento, color = Recuento)) +
+ggplot(dfM, aes(label = ID, size = Recuento, color = Recuento)) +
   geom_text_wordcloud(shape = "square") +
   scale_size_area(max_size = 19) +
   theme_minimal()+
-  scale_color_gradientn(colours = paletamine13)
+  scale_color_gradientn(colours = paletamine13) +
+  theme(
+    text = element_text(family = "Times New Roman") )
+ggsave("nubePalabrasMesh.png", width = 1608, height = 1185, units = "px", dpi = 300)
+
 
 ##############################################################################
-############Publicaciones por año, y ajuste a una exponencial#################
+############Publicaciones por año, y ajuste a una exponencial (Figura )#################
 
 # Numero de publicaciones por año
 #Años de 1975 al 2023
@@ -173,7 +246,7 @@ a <- coef_fit[1]
 b <- coef_fit[2]
 
 # Crear una cadena de texto con la ecuación del modelo
-equation <- paste("y = ", round(a, 6), " * exp(", round(b, 4), " * (x - 1975))", sep = "")
+equation <- paste("NAr_ñ = ", round(a, 6), " * exp(", round(b, 4), " * (ñ)", sep = "")
 
 # Predicciones basadas en el ajuste
 pred <- predict(fit)
@@ -188,8 +261,18 @@ ggplot() +
   #geom_text(data = data, aes(x = year, y = articles, label = articles), vjust = -1, hjust = 1, size = 3) + # Etiquetas para los puntos
   annotate("text", x = 2000, y = 1400, label = equation, color = "#ee0080", size = 4) + # Añadir la ecuación
   scale_color_manual(name = " ", values = c("Datos reales" = "black", "Ajuste exponencial" = "#ee0080")) +
-  labs(title = "Ajuste Exponencial de Artículos por Año", x = "Año", y = "Número de Artículos") +
-  theme_minimal()
+  labs(title = "Ajuste exponencial de artículos por año", x = "Año", y = "Número de artículos") +
+  theme_minimal()+
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, family = "Times New Roman"),
+    axis.text.y = element_text(family = "Times New Roman"),
+    plot.title = element_text(family = "Times New Roman"),
+    axis.title.x = element_text(family = "Times New Roman"),
+    axis.title.y = element_text(family = "Times New Roman"),
+    legend.text = element_text(family = "Times New Roman"),  
+    legend.title = element_text(family = "Times New Roman") )  
+ggsave("ajusteExp.png", width = 1608, height = 1185, units = "px", dpi = 300)
+
 
 
 # Calcular la tasa de crecimiento anual (R)
@@ -212,9 +295,9 @@ SST <- sum((obs - mean(obs))^2)
 # Calcular SSR (Suma de los Cuadrados de los Residuos)
 SSR <- sum((obs - pred)^2)
 
-# Calcular R²
-R2 <- 1 - (SSR / SST)
-R2
+# Calcular r²
+r2 <- 1 - (SSR / SST)
+r2
 #[1] 0.9801874
 
 # Número de parámetros
